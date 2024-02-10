@@ -5,7 +5,7 @@
 
 const express = require("express");
 const zod = require("zod");
-const { User } = require("../db");
+const { User, Account } = require("../db");
 const { JWT_SECRET } = require("../config");
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
@@ -54,6 +54,14 @@ router.post("/signup", async (req, res) => {
   const dbUser = await User.create(req.body);
 
   const user_id = dbUser._id;
+
+  //-------- Create a Account -------
+
+  Account.create({
+    userId: user_id,
+    balance: Math.random() * 100000,
+  });
+
   const token = jwt.sign(
     {
       user_id,
