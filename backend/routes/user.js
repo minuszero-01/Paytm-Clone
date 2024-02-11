@@ -9,7 +9,7 @@ const { User, Account } = require("../db");
 const { JWT_SECRET } = require("../config");
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
-const authMiddleware = require("../middleware");
+const { authMiddleware } = require("../middleware");
 
 // Why create a Router because we know every request will start from /api/v1/users
 // OR /api/v1/user that why create a route
@@ -53,18 +53,18 @@ router.post("/signup", async (req, res) => {
 
   const dbUser = await User.create(req.body);
 
-  const user_id = dbUser._id;
+  const userId = dbUser._id;
 
   //-------- Create a Account -------
 
   Account.create({
-    userId: user_id,
+    userId: userId,
     balance: Math.random() * 100000,
   });
 
   const token = jwt.sign(
     {
-      user_id,
+      userId,
     },
     JWT_SECRET
   );
@@ -84,11 +84,17 @@ router.put("/", authMiddleware, async (req, res) => {
     });
   }
 
-  const updatedEntry = await User.updateOne(req.body, {
-    _id: req.user_id,
-  });
+  await User.updateOne(
+    {
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+    },
+    {
+      _id: req.userId,
+    }
+  );
 
-  res.json("Successfully Updated");
+  return res.json({ message: "Successfully Updated" });
 });
 
 //difficult
