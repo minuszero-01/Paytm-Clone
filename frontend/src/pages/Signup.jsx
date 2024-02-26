@@ -14,6 +14,8 @@ export function Signup() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const navigate = useNavigate();
+
   return (
     <div className="bg-slate-300 h-screen flex justify-center">
       <div className="flex flex-col justify-center">
@@ -60,17 +62,18 @@ export function Signup() {
           <Button
             label={"Create an Account"}
             onClick={async () => {
-              const response = await axios.post(
-                "http://localhost:3000/api/v1/user/signup",
-                {
+              await axios
+                .post("http://localhost:3000/api/v1/user/signup", {
                   username,
                   firstName,
                   lastName,
                   password,
                   confirmPassword,
-                }
-              );
-              localStorage.setItem("token", response.data.token);
+                })
+                .then((res) => {
+                  localStorage.setItem("token", res.data.token);
+                  navigate("/dashboard");
+                });
             }}
           ></Button>
           <ButtonWarning

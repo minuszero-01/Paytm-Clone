@@ -47,22 +47,27 @@ router.post("/signin", async (req, res) => {
     });
   }
 
-  const user = await User.findOne({
-    username: req.body.username,
-  });
-  const token = jwt.sign(
-    {
-      userId: user._id,
-    },
-    JWT_SECRET
-  );
-
-  if (user.password == req.body.password) {
-    return res.json({
-      token,
-      message: "Success",
+  try {
+    const user = await User.findOne({
+      username: req.body.username,
     });
-  } else {
+    const token = jwt.sign(
+      {
+        userId: user._id,
+      },
+      JWT_SECRET
+    );
+
+    if (user.password == req.body.password) {
+      return res.json({
+        token,
+        message: "Success",
+        info: user.firstName,
+      });
+    } else {
+      return res.send("Failed");
+    }
+  } catch (err) {
     return res.send("Failed");
   }
 });
@@ -103,7 +108,7 @@ router.post("/signup", async (req, res) => {
     JWT_SECRET
   );
 
-  localStorage.setItem("token", token);
+  //localStorage.setItem("token", token);
   return res.json({
     message: "User created successfully",
     token: token,

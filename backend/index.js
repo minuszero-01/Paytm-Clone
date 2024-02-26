@@ -4,6 +4,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("./config");
+const { User } = require("./db");
 
 const app = express();
 const PORT = 3000;
@@ -28,8 +29,12 @@ app.get("/", (req, res) => {
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     req.userId = decoded.userId;
+    console.log(decoded.userId);
+
+    const Name = User.findOne();
     return res.json({
       message: "Success",
+      info: decoded.userId,
     });
   } catch (err) {
     console.log(err);

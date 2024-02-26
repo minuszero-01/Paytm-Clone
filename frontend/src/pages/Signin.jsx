@@ -35,16 +35,15 @@ export function Signin() {
           ></InputBox>
           <Button
             onClick={async () => {
-              const res = await axios
+              await axios
                 .post("http://localhost:3000/api/v1/user/signin", {
                   username,
                   password,
                 })
                 .then((res) => {
                   console.log(res);
-                  localStorage.removeItem("token");
                   localStorage.setItem("token", res.data.token);
-                  if (res.data == "Success") {
+                  if (res.data.message == "Success") {
                     navigate("/dashboard");
                   } else {
                     navigate("/signup");
