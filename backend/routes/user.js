@@ -18,6 +18,11 @@ router.use(bodyParser.json());
 
 //Defining ZOD schema
 
+const signinBody = zod.object({
+  username: zod.string().email(),
+  password: zod.string(),
+});
+
 const signupBody = zod.object({
   username: zod.string().email(),
   firstName: zod.string(),
@@ -32,6 +37,35 @@ const updateBody = zod.object({
 });
 
 // To add a User...
+
+router.post("/signin", async (req, res) => {
+  const { success } = signinBody.safeParse(req.body);
+
+  if (!success) {
+    return res.status(411).json({
+      message: "Email doesnot Exist",
+    });
+  }
+
+  const user = await User.findOne({
+    username: req.body.username,
+  });
+  const token = jwt.sign(
+    {
+      userId: user._id,
+    },
+    JWT_SECRET
+  );
+
+  if (user.password == req.body.password) {
+    return res.json({
+      token,
+      message: "Success",
+    });
+  } else {
+    return res.send("Failed");
+  }
+});
 
 router.post("/signup", async (req, res) => {
   const { success } = signupBody.safeParse(req.body);
@@ -68,6 +102,8 @@ router.post("/signup", async (req, res) => {
     },
     JWT_SECRET
   );
+
+  localStorage.setItem("token", token);
   return res.json({
     message: "User created successfully",
     token: token,

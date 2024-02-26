@@ -5,7 +5,7 @@ const authMiddleware = (req, res, next) => {
   const authToken = req.headers.authorization;
 
   if (!authToken || !authToken.startsWith("Bearer ")) {
-    return res.status(403).json({ message: "You are not Authorized" });
+    return res.status(403).json({ message: "Authorization Failed" });
   }
 
   const token = authToken.split(" ")[1];

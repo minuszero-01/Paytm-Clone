@@ -5,6 +5,7 @@ import { SubHeading } from "../Components/SubHeading";
 import { InputBox } from "../Components/InputBox";
 import { Button } from "../Components/Button";
 import { ButtonWarning } from "../Components/ButtonWarning";
+import { useNavigate } from "react-router";
 
 export function Signup() {
   const [firstName, setFirstName] = useState("");
@@ -74,7 +75,7 @@ export function Signup() {
           ></Button>
           <ButtonWarning
             label={"Already have an account?"}
-            to={"/signup"}
+            to={"/signin"}
             buttonText={"Signup"}
           ></ButtonWarning>
         </div>

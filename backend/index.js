@@ -3,7 +3,7 @@ const mainRoute = require("./routes/index");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
-const JWT_SECRET = require("./config");
+const { JWT_SECRET } = require("./config");
 
 const app = express();
 const PORT = 3000;
@@ -14,6 +14,30 @@ app.use(cors());
 app.use("/api/v1", mainRoute);
 
 app.use(bodyParser.json());
+
+app.get("/", (req, res) => {
+  const authToken = req.headers.authorization;
+  console.log(authToken);
+
+  if (!authToken || !authToken.startsWith("Bearer ")) {
+    return res.json({ message: "Failed" });
+  }
+
+  const token = authToken.split(" ")[1];
+  console.log(token);
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.userId = decoded.userId;
+    return res.json({
+      message: "Success",
+    });
+  } catch (err) {
+    console.log(err);
+    return res.json({
+      message: "Failed",
+    });
+  }
+});
 
 app.listen(PORT, () => {
   console.log("Listening to PORT", PORT);
