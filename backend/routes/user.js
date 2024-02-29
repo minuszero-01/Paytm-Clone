@@ -42,8 +42,8 @@ router.post("/signin", async (req, res) => {
   const { success } = signinBody.safeParse(req.body);
 
   if (!success) {
-    return res.status(411).json({
-      message: "Email doesnot Exist",
+    return res.json({
+      message: "Failed",
     });
   }
 
@@ -65,10 +65,14 @@ router.post("/signin", async (req, res) => {
         info: user.firstName,
       });
     } else {
-      return res.send("Failed");
+      return res.json({
+        message: "Failed",
+      });
     }
   } catch (err) {
-    return res.send("Failed");
+    return res.json({
+      message: "Failed",
+    });
   }
 });
 

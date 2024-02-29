@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Heading } from "../Components/Heading";
 import { SubHeading } from "../Components/SubHeading";
@@ -13,8 +13,15 @@ export function Signup() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  // const [checkPassword, setCheckPassword] = useState(true);
 
   const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   if (password != checkPassword) {
+  //     setCheckPassword(false);
+  //   }
+  // }, []);
 
   return (
     <div className="bg-slate-300 h-screen flex justify-center">
@@ -46,6 +53,7 @@ export function Signup() {
             }}
           ></InputBox>
           <InputBox
+            type={"Password"}
             label={"Password"}
             placeholder={"Enter the Password"}
             onChange={(e) => {
@@ -53,6 +61,7 @@ export function Signup() {
             }}
           ></InputBox>
           <InputBox
+            type={"Password"}
             label={"Confirm Password"}
             placeholder={"Re-type the Password"}
             onChange={(e) => {
@@ -62,24 +71,30 @@ export function Signup() {
           <Button
             label={"Create an Account"}
             onClick={async () => {
-              await axios
-                .post("http://localhost:3000/api/v1/user/signup", {
-                  username,
-                  firstName,
-                  lastName,
-                  password,
-                  confirmPassword,
-                })
-                .then((res) => {
-                  localStorage.setItem("token", res.data.token);
-                  navigate("/dashboard");
-                });
+              if (password != confirmPassword) {
+                window.location.reload();
+                console.log("failed");
+              } else if (password == confirmPassword) {
+                await axios
+                  .post("http://localhost:3000/api/v1/user/signup", {
+                    username,
+                    firstName,
+                    lastName,
+                    password,
+                    confirmPassword,
+                  })
+                  .then((res) => {
+                    localStorage.setItem("token", res.data.token);
+                    navigate("/dashboard");
+                    console.log("Done");
+                  });
+              }
             }}
           ></Button>
           <ButtonWarning
             label={"Already have an account?"}
             to={"/signin"}
-            buttonText={"Signup"}
+            buttonText={"Signin"}
           ></ButtonWarning>
         </div>
       </div>

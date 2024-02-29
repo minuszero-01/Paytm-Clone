@@ -27,6 +27,7 @@ export function Signin() {
             }}
           ></InputBox>
           <InputBox
+            type={"Password"}
             label={"Password"}
             placeholder={"Enter the Password"}
             onChange={(e) => {
@@ -45,17 +46,17 @@ export function Signin() {
                   localStorage.setItem("token", res.data.token);
                   if (res.data.message == "Success") {
                     navigate("/dashboard");
-                  } else {
+                  } else if (res.data.message == "Failed") {
                     navigate("/signup");
                   }
                 });
             }}
-            label={"Sign Up"}
+            label={"Sign In"}
           ></Button>
           <ButtonWarning
             label={"Don't have an account ? "}
             to={"/signup"}
-            buttonText={"Signin"}
+            buttonText={"Signup"}
           ></ButtonWarning>
         </div>
       </div>
