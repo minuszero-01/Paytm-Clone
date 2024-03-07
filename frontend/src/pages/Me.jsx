@@ -1,9 +1,11 @@
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import { MyName } from "../providers/NameContext";
 
 export function Me() {
   const navigate = useNavigate();
+  const { setName } = useContext(MyName);
 
   useEffect(() => {
     window.onload = async () => {
@@ -17,6 +19,7 @@ export function Me() {
           if (res.data.message == "Failed") {
             navigate("/landingpage");
           } else if (res.data.message == "Success") {
+            setName(res.data.info);
             navigate("/dashboard");
           }
         });

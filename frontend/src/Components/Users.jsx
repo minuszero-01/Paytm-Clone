@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 export function Users() {
   const [users, setUsers] = useState([]);
-  const [filter, setFilter] = useState();
+  const [filter, setFilter] = useState("");
 
   useEffect(() => {
     axios

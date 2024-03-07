@@ -16,7 +16,7 @@ app.use("/api/v1", mainRoute);
 
 app.use(bodyParser.json());
 
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
   const authToken = req.headers.authorization;
   console.log(authToken);
 
@@ -25,16 +25,21 @@ app.get("/", (req, res) => {
   }
 
   const token = authToken.split(" ")[1];
-  console.log(token);
+
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    req.userId = decoded.userId;
-    console.log(decoded.userId);
+    // req.userId = decoded.userId;
 
-    const Name = User.findOne();
+    const Name = await User.findOne({
+      _id: decoded.userId,
+    });
+
     return res.json({
       message: "Success",
-      info: decoded.userId,
+      info: {
+        firstName: Name.firstName,
+        userId: decoded.userId,
+      },
     });
   } catch (err) {
     console.log(err);

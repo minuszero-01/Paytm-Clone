@@ -13,15 +13,8 @@ export function Signup() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  // const [checkPassword, setCheckPassword] = useState(true);
 
   const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   if (password != checkPassword) {
-  //     setCheckPassword(false);
-  //   }
-  // }, []);
 
   return (
     <div className="bg-slate-300 h-screen flex justify-center">
