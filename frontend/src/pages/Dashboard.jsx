@@ -11,6 +11,8 @@ export function Dashboard() {
   const navigate = useNavigate();
   const { name } = useContext(MyName);
 
+  console.log(name.firstName)
+  
   const handleLogout = useCallback(async () => {
     localStorage.removeItem("token");
     navigate("/signin");
